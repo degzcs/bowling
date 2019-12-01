@@ -4,7 +4,7 @@ class GamesController < ActionController::API
     service.call(names: create_params)
 
     if service.valid?
-      render json: "Let's play guys!!"
+      render json: service, serializer: StartGameSerializer
     else
       render json: { error: service.errors.full_messages[0] }
     end
