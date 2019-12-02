@@ -26,6 +26,7 @@ describe EnterKnockedPins do
         expect { subject.call() }.to raise_error ArgumentError
       end
     end
+
     context 'Second Ball' do
       let(:frame) do
         Frame.find_by(game_id: game.id, player_id: player1.id, number: 1)

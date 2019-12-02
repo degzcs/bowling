@@ -27,4 +27,12 @@ class Frame < ApplicationRecord
   def finished?
     self.knocked_pins2 != 0
   end
+
+  def strike?
+    self.knocked_pins1 == Frame::MAX_PINS
+  end
+
+  def spare?
+    self.knocked_pins1 + self.knocked_pins2 == Frame::MAX_PINS
+  end
 end
