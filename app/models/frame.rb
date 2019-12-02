@@ -20,19 +20,25 @@ class Frame < ApplicationRecord
   # Instance Methods
   #
 
+  def beginning_of_the_frame?
+    self.round == 0
+  end
+
   def first_round?
-    self.knocked_pins1 == 0
+    self.round == 1
+  end
+
+  def second_round?
+    self.round == 2
   end
 
   def finished?
-    self.knocked_pins2 != 0
+    self.strike? ||
+    (self.spare? && self.first_round?) ||
+    self.second_round?
   end
 
-  def strike?
-    self.knocked_pins1 == Frame::MAX_PINS
-  end
-
-  def spare?
-    self.knocked_pins1 + self.knocked_pins2 == Frame::MAX_PINS
+  def tenth?
+    self.number == 10
   end
 end

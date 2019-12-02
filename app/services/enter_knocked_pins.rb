@@ -6,8 +6,8 @@ class EnterKnockedPins < ActiveModelService
 
   def call(game_id:, player_id:, frame_number:, knocked_pins:)
      ActiveRecord::Base.transaction do
-      @frame = Frame.find_by(game_id: game_id, player_id: player_id, number: frame_number)
-      update_pins!(knocked_pins)
+      @frame ||= Frame.find_by(game_id: game_id, player_id: player_id, number: frame_number)
+      all_pins_knocked?(knocked_pins) ? mark_frame!(frame_number) : update_pins!(knocked_pins)
     rescue => e
       errors.add(:error, e.message)
     end
@@ -15,8 +15,32 @@ class EnterKnockedPins < ActiveModelService
 
   private
 
+  def all_pins_knocked?(knocked_pins)
+    knocked_pins == 10
+  end
+
+  def mark_frame!
+    frame.first_round? ? strike! : spare!
+  end
+
+  def strike!
+    if frame.tenth?
+      frame.update(strike: true)
+    else
+      frame.update({ knocked_pins_key => knocked_pins }) unless frame.finished?
+    end
+  end
+
+  def spare!
+    if frame.tenth?
+      frame.update(strike: true)
+    else
+      frame.update({ knocked_pins_key => knocked_pins }) unless frame.finished?
+    end
+  end
+
   def update_pins!(knocked_pins)
-    frame.update({ round_key => knocked_pins }) unless frame.finished?
+    frame.update({ knocked_pins_key => knocked_pins }) unless frame.finished?
     check_update
   end
 
@@ -25,8 +49,8 @@ class EnterKnockedPins < ActiveModelService
     frame.reload
   end
 
-  def round_key
-    frame.first_round? ? :knocked_pins1 : :knocked_pins2
+  def knocked_pins_key
+    frame.beginning_of_the_frame? ? :knocked_pins1 : :knocked_pins2
   end
 end
 
