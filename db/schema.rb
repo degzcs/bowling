@@ -10,23 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191201202134) do
+ActiveRecord::Schema.define(version: 20191202043507) do
 
   create_table "frames", force: :cascade do |t|
     t.integer "game_id"
     t.integer "player_id"
-    t.integer "knocked_pins1"
-    t.integer "knocked_pins2"
-    t.integer "score"
+    t.integer "knocked_pins1", default: 0
+    t.integer "knocked_pins2", default: 0
+    t.integer "score", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "number"
+    t.integer "number", default: 0
     t.index ["game_id"], name: "index_frames_on_game_id"
     t.index ["player_id"], name: "index_frames_on_player_id"
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "total_score"
+    t.integer "total_score", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

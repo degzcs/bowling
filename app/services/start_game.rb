@@ -6,7 +6,7 @@ class StartGame < ActiveModelService
 
   def call(names:)
     ActiveRecord::Base.transaction do
-      @game = Game.create(total_score: 0)
+      @game = Game.create
       players = create_players_from(names)
       players.each do |player|
         Frame::PER_GAME.times do |i|
