@@ -15,7 +15,7 @@ describe GenerateGameScore do
         players: [
           {
             name: 'Fernando',
-            total_score: 150,
+            total_score: 140,
             frames: [
               {
                 number: 1,
@@ -23,45 +23,45 @@ describe GenerateGameScore do
               },
               {
                 number: 2,
-                score: 50
+                score: 45
               },
               {
                 number: 3,
-                score: 85
+                score: 75
               },
               {
                 number: 4,
-                score: 110
+                score: 100
               },
               {
                 number: 5,
-                score: 125
+                score: 115
               },
               {
                 number: 6,
-                score: 130
+                score: 120
               },
               {
                 number: 7,
-                score: 135
+                score: 125
               },
               {
                 number: 8,
-                score: 140
+                score: 130
               },
               {
                 number: 9,
-                score: 145
+                score: 135
               },
               {
                 number: 10,
-                score: 150
+                score: 140
               }
             ]
           },
           {
             name: 'Diego',
-            total_score: 150,
+            total_score: 140,
             frames: [
               {
                 number: 1,
@@ -69,39 +69,39 @@ describe GenerateGameScore do
               },
               {
                 number: 2,
-                score: 50
+                score: 45
               },
               {
                 number: 3,
-                score: 85
+                score: 75
               },
               {
                 number: 4,
-                score: 110
+                score: 100
               },
               {
                 number: 5,
-                score: 125
+                score: 115
               },
               {
                 number: 6,
-                score: 130
+                score: 120
               },
               {
                 number: 7,
-                score: 135
+                score: 125
               },
               {
                 number: 8,
-                score: 140
+                score: 130
               },
               {
                 number: 9,
-                score: 145
+                score: 135
               },
               {
                 number: 10,
-                score: 150
+                score: 140
               }
             ]
           },

@@ -1,4 +1,4 @@
-class GenerateGameScore
+class GenerateGameScore < ActiveModelService
   attr_reader :game, :score
   def initialize
   end

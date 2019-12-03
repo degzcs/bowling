@@ -10,13 +10,24 @@ class GamesController < ActionController::API
     end
   end
 
-  def score
+  def enter_knocked_pins
     service = EnterKnockedPins.new
     new_params = enter_knocked_params.merge(game_id: params[:game_id]).to_h.symbolize_keys
     service.call(new_params)
 
     if service.valid?
       render json: service.frame, serializer: FrameSerializer
+    else
+      render json: { error: service.errors.full_messages[0] }
+    end
+  end
+
+  def score
+    service = GenerateGameScore.new
+    service.call(game_id: params[:game_id])
+
+    if service.valid?
+      render json: service.score
     else
       render json: { error: service.errors.full_messages[0] }
     end
@@ -32,3 +43,4 @@ class GamesController < ActionController::API
     params.permit(:player_id, :frame_number, :knocked_pins, :round)
   end
 end
+
