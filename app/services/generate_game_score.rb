@@ -27,6 +27,7 @@ class GenerateGameScore
   end
 
   def calculate_score_from(frame)
+    return frame.knocked_pins if frame.tenth?
     if frame.strike?
      calculate_strike_for(frame)
     elsif frame.spare?
@@ -36,12 +37,12 @@ class GenerateGameScore
     end
   end
 
-  def calculate_strike_for(frame, cumulative = 0)
+  def calculate_strike_for(frame, cumulative = 0, strikes = 1)
     next_frame = next_frame_for(frame)
     if next_frame.strike?
-      calculate_strike_for(next_frame, cumulative) + next_frame.knocked_pins
+      calculate_strike_for(next_frame, cumulative, strikes + 1) + next_frame.knocked_pins
     else
-      frame.knocked_pins + next_frame.knocked_pins
+      strikes < 3 ? frame.knocked_pins + next_frame.knocked_pins : frame.knocked_pins
     end
   end
 
