@@ -127,7 +127,7 @@ describe GenerateGameScore do
       Frame.where(number: 7).update(knocked_pins1: 10, round: 1, strike: true)
       Frame.where(number: 8).update(knocked_pins1: 9, knocked_pins2: 0, round: 2)
       Frame.where(number: 9).update(knocked_pins1: 8, knocked_pins2: 2, round: 2, spare: true)
-      Frame.where(number: 10).update(knocked_pins1: 9, knocked_pins2: 1, round: 2, spare: true)
+      Frame.where(number: 10).update(knocked_pins1: 5, knocked_pins2: 4, round: 2, strike: true)
     end
 
     it 'should sum the scores for each frame' do
@@ -135,47 +135,47 @@ describe GenerateGameScore do
         players: [
           {
             name: 'Fernando',
-            total_score: 50,
+            total_score: 172,
             frames: [
               {
                 number: 1,
-                score: 5
-              },
-              {
-                number: 2,
-                score: 10
-              },
-              {
-                number: 3,
-                score: 15
-              },
-              {
-                number: 4,
                 score: 20
               },
               {
-                number: 5,
-                score: 25
-              },
-              {
-                number: 6,
-                score: 30
-              },
-              {
-                number: 7,
+                number: 2,
                 score: 35
               },
               {
+                number: 3,
+                score: 52
+              },
+              {
+                number: 4,
+                score: 61
+              },
+              {
+                number: 5,
+                score: 91
+              },
+              {
+                number: 6,
+                score: 120
+              },
+              {
+                number: 7,
+                score: 139
+              },
+              {
                 number: 8,
-                score: 40
+                score: 148
               },
               {
                 number: 9,
-                score: 45
+                score: 163
               },
               {
                 number: 10,
-                score: 50
+                score: 172
               }
             ]
           }
