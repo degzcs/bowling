@@ -50,6 +50,6 @@ class GenerateGameScore
   end
 
   def calculate_spare_for(frame)
-    frame.knocked_pins + Frame.where(game_id: frame.game_id, number: frame.number + 1).first.knocked_pins1
+    frame.knocked_pins + next_frame_for(frame).knocked_pins1
   end
 end

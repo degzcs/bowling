@@ -4,10 +4,10 @@ describe GenerateGameScore do
     service.call(names: ['Fernando', 'Diego'])
     service.game
   end
-  context 'Strike game' do
+  context 'Spare game' do
     before :each do
-      game.frames.where.not(number: [2,3,4,5]).update_all(knocked_pins1: 2, knocked_pins2: 3, round: 2)
-      game.frames.where(number: [2,3,4,5]).update(strike: true, knocked_pins1: 10, round: 1)
+      game.frames.where.not(number: [2,3]).update_all(knocked_pins1: 2, knocked_pins2: 3, round: 2)
+      game.frames.where(number: [2,3]).update(spare: true, knocked_pins1: 9, knocked_pins2: 1, round: 2)
     end
 
     it 'should sum the scores for each frame' do
@@ -15,7 +15,7 @@ describe GenerateGameScore do
         players: [
           {
             name: 'Fernando',
-            total_score: 150,
+            total_score: 71,
             frames: [
               {
                 number: 1,
@@ -23,45 +23,45 @@ describe GenerateGameScore do
               },
               {
                 number: 2,
-                score: 50
+                score: 24
               },
               {
                 number: 3,
-                score: 85
+                score: 36
               },
               {
                 number: 4,
-                score: 110
+                score: 41
               },
               {
                 number: 5,
-                score: 125
+                score: 46
               },
               {
                 number: 6,
-                score: 130
+                score: 51
               },
               {
                 number: 7,
-                score: 135
+                score: 56
               },
               {
                 number: 8,
-                score: 140
+                score: 61
               },
               {
                 number: 9,
-                score: 145
+                score: 66
               },
               {
                 number: 10,
-                score: 150
+                score: 71
               }
             ]
           },
           {
             name: 'Diego',
-            total_score: 150,
+            total_score: 71,
             frames: [
               {
                 number: 1,
@@ -69,39 +69,39 @@ describe GenerateGameScore do
               },
               {
                 number: 2,
-                score: 50
+                score: 24
               },
               {
                 number: 3,
-                score: 85
+                score: 36
               },
               {
                 number: 4,
-                score: 110
+                score: 41
               },
               {
                 number: 5,
-                score: 125
+                score: 46
               },
               {
                 number: 6,
-                score: 130
+                score: 51
               },
               {
                 number: 7,
-                score: 135
+                score: 56
               },
               {
                 number: 8,
-                score: 140
+                score: 61
               },
               {
                 number: 9,
-                score: 145
+                score: 66
               },
               {
                 number: 10,
-                score: 150
+                score: 71
               }
             ]
           },
