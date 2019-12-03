@@ -17,10 +17,6 @@ class EnterKnockedPins < ActiveModelService
 
   private
 
-  def special_play?
-    knocked_pins == 10 && !frame.strike && !frame.spare
-  end
-
   def mark_frame!
     new_attrs = first_round? ? strike_attrs! : spare_attrs!
     update_frame!(new_attrs.merge(round: round).compact)
@@ -41,7 +37,7 @@ class EnterKnockedPins < ActiveModelService
   end
 
   def update_pins!
-    update_frame!({ knocked_pins_key => knocked_pins, round: round })
+    update_frame!({ knocked_pins_key => knocked_pins, round: round, spare: spare? })
   end
 
   def update_frame!(attrs)
@@ -62,12 +58,24 @@ class EnterKnockedPins < ActiveModelService
     (frame.tenth? && frame.strike?) ? second_round? : first_round?
   end
 
+  def spare?
+    second_round? && !frame.strike? ? (frame.knocked_pins1 + knocked_pins == 10) : false
+  end
+
   def first_round?
     round ==  1
   end
 
   def second_round?
     round ==  2
+  end
+
+  def special_play?
+    knocked_all_pins? && !frame.strike && !frame.spare
+  end
+
+  def knocked_all_pins?
+    knocked_pins == 10
   end
 end
 
