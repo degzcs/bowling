@@ -20,6 +20,10 @@ class Frame < ApplicationRecord
   # Instance Methods
   #
 
+  def knocked_pins
+    self.knocked_pins1 + self.knocked_pins2
+  end
+
   def beginning_of_the_frame?
     self.round == 0
   end
