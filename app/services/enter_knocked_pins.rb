@@ -8,7 +8,7 @@ class EnterKnockedPins < ActiveModelService
      ActiveRecord::Base.transaction do
       @frame = Frame.find_by(game_id: game_id, player_id: player_id, number: frame_number)
       @knocked_pins = knocked_pins
-      @round = round
+      @round = round.to_i
       special_play? ? mark_frame! : update_pins!
     rescue => e
       errors.add(:error, e.message)

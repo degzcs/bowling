@@ -36,11 +36,11 @@ describe GamesController, type: :request do
 
     it 'should input the number of pins by ball' do
       expected_game = {
-        id: 2,
+        id: 1,
         knocked_pins1: 3,
         knocked_pins2: 0
       }
-      post game_score_path(game.id), params: { player_id: player1.id, frame_number: 1, knocked_pins: 3 }
+      post game_score_path(game.id), params: { player_id: player1.id, frame_number: 1, knocked_pins: 3, round: 1 }
       expect(JSON.parse response.body).to eq expected_game.as_json
     end
   end

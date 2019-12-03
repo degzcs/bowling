@@ -29,6 +29,6 @@ class GamesController < ActionController::API
   end
 
   def enter_knocked_params
-    params.permit(:player_id, :frame_number, :knocked_pins)
+    params.permit(:player_id, :frame_number, :knocked_pins, :round)
   end
 end
