@@ -1,13 +1,15 @@
 class EnterKnockedPins < ActiveModelService
-  attr_reader :frame
+  attr_reader :frame, :knocked_pins, :round
 
   def initialize
   end
 
-  def call(game_id:, player_id:, frame_number:, knocked_pins:)
+  def call(game_id:, player_id:, frame_number:, knocked_pins:, round:)
      ActiveRecord::Base.transaction do
-      @frame ||= Frame.find_by(game_id: game_id, player_id: player_id, number: frame_number)
-      all_pins_knocked?(knocked_pins) ? mark_frame!(frame_number) : update_pins!(knocked_pins)
+      @frame = Frame.find_by(game_id: game_id, player_id: player_id, number: frame_number)
+      @knocked_pins = knocked_pins
+      @round = round
+      special_play? ? mark_frame! : update_pins!
     rescue => e
       errors.add(:error, e.message)
     end
@@ -15,32 +17,35 @@ class EnterKnockedPins < ActiveModelService
 
   private
 
-  def all_pins_knocked?(knocked_pins)
-    knocked_pins == 10
+  def special_play?
+    knocked_pins == 10 && !frame.strike && !frame.spare
   end
 
   def mark_frame!
-    frame.first_round? ? strike! : spare!
+    new_attrs = first_round? ? strike_attrs! : spare_attrs!
+    update_frame!(new_attrs.merge(round: round).compact)
   end
 
-  def strike!
-    if frame.tenth?
-      frame.update(strike: true)
-    else
-      frame.update({ knocked_pins_key => knocked_pins }) unless frame.finished?
-    end
+  def strike_attrs!
+    {
+      knocked_pins_key => (knocked_pins unless frame.tenth?),
+      strike: true
+    }
   end
 
-  def spare!
-    if frame.tenth?
-      frame.update(strike: true)
-    else
-      frame.update({ knocked_pins_key => knocked_pins }) unless frame.finished?
-    end
+  def spare_attrs!
+    {
+      knocked_pins_key => (knocked_pins unless frame.tenth?),
+      spare: true
+    }
   end
 
-  def update_pins!(knocked_pins)
-    frame.update({ knocked_pins_key => knocked_pins }) unless frame.finished?
+  def update_pins!
+    update_frame!({ knocked_pins_key => knocked_pins, round: round })
+  end
+
+  def update_frame!(attrs)
+    frame.update(attrs) unless frame.finished?
     check_update
   end
 
@@ -50,7 +55,19 @@ class EnterKnockedPins < ActiveModelService
   end
 
   def knocked_pins_key
-    frame.beginning_of_the_frame? ? :knocked_pins1 : :knocked_pins2
+    select_knocked_pins1? ? :knocked_pins1 : :knocked_pins2
+  end
+
+  def select_knocked_pins1?
+    (frame.tenth? && frame.strike?) ? second_round? : first_round?
+  end
+
+  def first_round?
+    round ==  1
+  end
+
+  def second_round?
+    round ==  2
   end
 end
 

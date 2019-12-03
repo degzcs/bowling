@@ -13,8 +13,8 @@ class Frame < ApplicationRecord
   # Validations
   #
 
-  validates :knocked_pins1, numericality: { less_than: Frame::MAX_PINS }
-  validates :knocked_pins2, numericality: { less_than: Frame::MAX_PINS }
+  validates :knocked_pins1, numericality: { less_than_or_equal_to: Frame::MAX_PINS }
+  validates :knocked_pins2, numericality: { less_than_or_equal_to: Frame::MAX_PINS }
 
   #
   # Instance Methods
@@ -32,10 +32,26 @@ class Frame < ApplicationRecord
     self.round == 2
   end
 
+  def third_round?
+    self.round == 3
+  end
+
   def finished?
-    self.strike? ||
-    (self.spare? && self.first_round?) ||
-    self.second_round?
+    strike_finished? ||
+      spare_finished? ||
+      regular_finished?
+  end
+
+  def strike_finished?
+    tenth? ? (self.strike && third_round?) : self.strike
+  end
+
+  def spare_finished?
+    tenth? ? (self.spare && second_round?) : (self.spare && self.first_round?)
+  end
+
+  def regular_finished?
+    self.second_round? && !self.strike && !self.spare
   end
 
   def tenth?

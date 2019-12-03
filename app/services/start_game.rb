@@ -10,7 +10,7 @@ class StartGame < ActiveModelService
       players = create_players_from(names)
       players.each do |player|
         Frame::PER_GAME.times do |i|
-          Frame.create(player: player, game: game, number: i)
+          Frame.create(player: player, game: game, number: i + 1)
         end
       end
     rescue => e
