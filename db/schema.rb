@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191202135055) do
+ActiveRecord::Schema.define(version: 20191204012906) do
 
   create_table "frames", force: :cascade do |t|
     t.integer "game_id"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20191202135055) do
     t.boolean "strike", default: false
     t.boolean "spare", default: false
     t.integer "round", default: 0
+    t.integer "knocked_pins3", default: 0
     t.index ["game_id"], name: "index_frames_on_game_id"
     t.index ["player_id"], name: "index_frames_on_player_id"
   end

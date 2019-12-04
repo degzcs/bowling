@@ -9,7 +9,7 @@ class EnterKnockedPins < ActiveModelService
       @frame = Frame.find_by(game_id: game_id, player_id: player_id, number: frame_number)
       @knocked_pins = knocked_pins
       @round = round.to_i
-      special_play? ? mark_frame! : update_pins!
+      update_pins!
     rescue => e
       errors.add(:error, e.message)
     end
@@ -17,27 +17,8 @@ class EnterKnockedPins < ActiveModelService
 
   private
 
-  def mark_frame!
-    new_attrs = first_round? ? strike_attrs! : spare_attrs!
-    update_frame!(new_attrs.merge(round: round).compact)
-  end
-
-  def strike_attrs!
-    {
-      knocked_pins_key => (knocked_pins unless frame.tenth?),
-      strike: true
-    }
-  end
-
-  def spare_attrs!
-    {
-      knocked_pins_key => (knocked_pins unless frame.tenth?),
-      spare: true
-    }
-  end
-
   def update_pins!
-    update_frame!({ knocked_pins_key => knocked_pins, round: round, spare: spare? })
+    update_frame!({ knocked_pins_key => knocked_pins, round: round })
   end
 
   def update_frame!(attrs)
@@ -50,24 +31,18 @@ class EnterKnockedPins < ActiveModelService
     frame.reload
   end
 
+  # @returns [Symbol]
+  # it could be :knocked_pins1, :knocked_pins2 or :knocked_pins3
   def knocked_pins_key
-    select_knocked_pins1? ? :knocked_pins1 : :knocked_pins2
+    "knocked_pins#{round}".to_sym
   end
 
-  def select_knocked_pins1?
-    (frame.tenth? && frame.strike?) ? second_round? : first_round?
-  end
-
-  def spare?
-    second_round? && !frame.strike? ? (frame.knocked_pins1 + knocked_pins == 10) : false
-  end
-
-  def first_round?
-    round ==  1
+  def second_round_regular_frame?
+    second_round? && !frame.strike?
   end
 
   def second_round?
-    round ==  2
+    round == 2
   end
 
   def special_play?

@@ -15,13 +15,20 @@ class Frame < ApplicationRecord
 
   validates :knocked_pins1, numericality: { less_than_or_equal_to: Frame::MAX_PINS }
   validates :knocked_pins2, numericality: { less_than_or_equal_to: Frame::MAX_PINS }
+  validates :knocked_pins3, numericality: { less_than_or_equal_to: Frame::MAX_PINS }
+
+  #
+  # Callbacks
+  #
+
+  before_save :special_play?
 
   #
   # Instance Methods
   #
 
   def knocked_pins
-    self.knocked_pins1 + self.knocked_pins2
+    self.knocked_pins1 + self.knocked_pins2 + self.knocked_pins3
   end
 
   def beginning_of_the_frame?
@@ -51,7 +58,7 @@ class Frame < ApplicationRecord
   end
 
   def spare_finished?
-    tenth? ? (self.spare && second_round?) : (self.spare && self.first_round?)
+    tenth? ? (self.spare && third_round?) : (self.spare && self.second_round?)
   end
 
   def regular_finished?
@@ -60,5 +67,12 @@ class Frame < ApplicationRecord
 
   def tenth?
     self.number == 10
+  end
+
+  private
+
+  def special_play?
+    self.strike = self.knocked_pins1 == MAX_PINS if self.first_round?
+    self.spare = (self.knocked_pins1 + self.knocked_pins2) == MAX_PINS if self.second_round?
   end
 end
