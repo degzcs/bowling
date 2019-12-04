@@ -111,23 +111,20 @@ describe GenerateGameScore do
     end
   end
   context 'Complex game' do
-    let(:game) do
-      service = StartGame.new
-      service.call(names: ['Fernando'])
-      service.game
-    end
+    let(:game) { Game.create }
+    let(:player){ Player.create name: 'Fernando' }
+
     before :each do
-      game
-      Frame.where(number: 1).update(knocked_pins1: 10, round: 1, strike: true)
-      Frame.where(number: 2).update(knocked_pins1: 9, knocked_pins2: 1, round: 2, spare: true)
-      Frame.where(number: 3).update(knocked_pins1: 5, knocked_pins2: 5, round: 2, spare: true)
-      Frame.where(number: 4).update(knocked_pins1: 7, knocked_pins2: 2, round: 2)
-      Frame.where(number: 5).update(knocked_pins1: 10, round: 1, strike: true)
-      Frame.where(number: 6).update(knocked_pins1: 10, round: 1, strike: true)
-      Frame.where(number: 7).update(knocked_pins1: 10, round: 1, strike: true)
-      Frame.where(number: 8).update(knocked_pins1: 9, knocked_pins2: 0, round: 2)
-      Frame.where(number: 9).update(knocked_pins1: 8, knocked_pins2: 2, round: 2, spare: true)
-      Frame.where(number: 10).update(knocked_pins1: 5, knocked_pins2: 4, round: 2, strike: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 1, knocked_pins1: 10, round: 1, strike: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 2, knocked_pins1: 9, knocked_pins2: 1, round: 2, spare: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 3, knocked_pins1: 5, knocked_pins2: 5, round: 2, spare: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 4, knocked_pins1: 7, knocked_pins2: 2, round: 2)
+      Frame.create(game_id: game.id, player_id: player.id, number: 5, knocked_pins1: 10, round: 1, strike: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 6, knocked_pins1: 10, round: 1, strike: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 7, knocked_pins1: 10, round: 1, strike: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 8, knocked_pins1: 9, knocked_pins2: 0, round: 2)
+      Frame.create(game_id: game.id, player_id: player.id, number: 9, knocked_pins1: 8, knocked_pins2: 2, round: 2, spare: true)
+      Frame.create(game_id: game.id, player_id: player.id, number: 10, knocked_pins1: 9, knocked_pins2: 1, knocked_pins3: 10, round: 3, strike: true)
     end
 
     it 'should sum the scores for each frame' do
@@ -135,7 +132,7 @@ describe GenerateGameScore do
         players: [
           {
             name: 'Fernando',
-            total_score: 172,
+            total_score: 187,
             frames: [
               {
                 number: 1,
@@ -171,11 +168,11 @@ describe GenerateGameScore do
               },
               {
                 number: 9,
-                score: 163
+                score: 167
               },
               {
                 number: 10,
-                score: 172
+                score: 187
               }
             ]
           }
